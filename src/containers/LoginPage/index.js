@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
-import { signin } from "../../actions/auth_actions";
+import { signin } from "../../actions";
 import Layout from "../../components/Layout";
 import Card from "../../components/UI/Card";
 import "./style.css";

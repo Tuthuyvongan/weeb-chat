@@ -8,6 +8,7 @@ import PrivateRoute from './components/PrivateRoute';
 import { useDispatch, useSelector } from 'react-redux';
 import { isLoggedInUser } from './actions';
 
+
 function App() {
 
   const auth = useSelector(state => state.auth);

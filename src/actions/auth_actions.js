@@ -25,6 +25,7 @@ export const signup = (user) => {
                 search: user.username,
                 status: "offline",
                 username: user.username,
+                isOnline: true
               })
               .then(() => {
                 const loggedInUser = {
