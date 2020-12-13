@@ -41,6 +41,7 @@ const LoginPage = (props) => {
   if (auth.authenticated){
     return <Redirect to={'/'}/>
   }
+  
   return (
     <Layout>
       <div className="loginContainer">

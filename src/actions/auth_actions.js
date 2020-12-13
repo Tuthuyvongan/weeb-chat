@@ -63,20 +63,31 @@ export const signin = (user) => {
       .signInWithEmailAndPassword(user.email, user.password)
       .then((data) => {
         console.log(data);
-        const name = data.user.displayName;
-        const username = name;
+        firebase.database().ref('Users/').child(data.user.uid).update({
+          status: 'online',
+          isOnline: true,
+        })
+        .then(() =>{
+          const name = data.user.displayName;
+          const username = name;
+  
+          const loggedInUser = {
+            username,
+            uid: data.user.uid,
+            email: data.user.email,
+          };
+          localStorage.setItem("user", JSON.stringify(loggedInUser));
+  
+          dispatch({
+            type: `${authConstanst.USER_LOGIN}_SUCCESS`,
+            payload: { user: loggedInUser },
+          });
+        })
+        .catch(error => {
+          console.log(error);
+        })
 
-        const loggedInUser = {
-          username,
-          uid: data.user.uid,
-          email: data.user.email,
-        };
-        localStorage.setItem("user", JSON.stringify(loggedInUser));
-
-        dispatch({
-          type: `${authConstanst.USER_LOGIN}_SUCCESS`,
-          payload: { user: loggedInUser },
-        });
+        
       })
       .catch((error) => {
         console.log(error);
@@ -108,12 +119,17 @@ export const isLoggedInUser = () => {
   };
 };
 
-export const logout = (uid) => {
+export const logout = (id) => {
   return async (dispatch) => {
     dispatch({ type: `${authConstanst.USER_LOGOUT}_REQUEST` });
     //Now lets logout user
-    
-        firebase
+    firebase.database().ref('Users/').child(id).update({
+          status: 'offline',
+          isOnline: false,
+    })
+    .then(()=>{
+
+      firebase
         .auth()
           .signOut()
           .then(() => {
@@ -128,6 +144,9 @@ export const logout = (uid) => {
               payload: { error },
             });
           });
-      
+    })
+    .catch((error) =>{
+      console.log(error);
+    })        
   };
 };
