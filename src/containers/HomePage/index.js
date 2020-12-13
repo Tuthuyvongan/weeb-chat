@@ -4,18 +4,21 @@ import { getRealTimeConversations, getRealTimeUsers, updateMessage } from "../..
 import Layout from "../../components/Layout";
 import "./style.css";
 
+
+
 const USer = (props) => {
 
 
 const {user, onClick} = props;
-
+    
    return (
     <div onClick={()=> onClick(user)} className="displayName">
     <div className="displayPic">
-      <img
-        src="https://i.pinimg.com/originals/be/ac/96/beac96b8e13d2198fd4bb1d5ef56cdcf.jpg"
-        alt=""
-      />
+      <img  
+      src={user.imageURL}
+      alt=""
+    />
+
     </div>
     <div style={{display:'flex', flex: 1, justifyContent:'space-between', margin: "0 10px" }}>
       <span style={{ fontWeight: 500 }}>{user.username}</span>
@@ -78,7 +81,10 @@ const HomePage = (props) => {
       }
 
       if ( message !== ""){
-        dispatch(updateMessage(msgObject));
+        dispatch(updateMessage(msgObject))
+        .then(()=>{
+          setMessage('');
+        })
       }
 
       console.log(msgObject);
