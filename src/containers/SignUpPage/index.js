@@ -48,7 +48,7 @@ const SignUpPage = (props) => {
               onChange={(e) => setUsername(e.target.value)}
               placeholder="Username"
             />
-
+            <br></br>
             <input
               name="email"
               type="text"
@@ -56,7 +56,7 @@ const SignUpPage = (props) => {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Email"
             />
-
+            <br></br>
             <input
               name="password"
               type="password"
@@ -64,7 +64,7 @@ const SignUpPage = (props) => {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Password"
             />
-
+            <br></br>
             <div>
               <button>Sign up</button>
             </div>

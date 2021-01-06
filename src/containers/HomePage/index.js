@@ -3,8 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getRealTimeConversations, getRealTimeUsers, updateMessage } from "../../actions";
 import Layout from "../../components/Layout";
 import "./style.css";
-
-
+import firebase from "firebase";
 
 const USer = (props) => {
 
@@ -28,6 +27,7 @@ const {user, onClick} = props;
    );
 }
 
+
 const HomePage = (props) => {
 
   const dispatch = useDispatch();
@@ -37,9 +37,14 @@ const HomePage = (props) => {
   const [chatUser, setChatUser] = useState('');
   const [message, setMessage] = useState('');
   const [userUid, setUserUid] = useState(null);
+  const [imageUrl, setImageUrl] = useState([]);
+
   let unsubcribe;
  
-  
+  useEffect(() => {
+    getImageUrl();
+  }, []);
+
   useEffect(()=>{
     unsubcribe = dispatch(getRealTimeUsers(auth.uid))
     .then(unsubcribe=>{
@@ -73,10 +78,11 @@ const HomePage = (props) => {
 
 
   const submitMessage = (e) =>{
-
       const msgObject = {
         sender: auth.uid,
         receiver: userUid,
+        isView: false,
+        type: "text",
         message
       }
 
@@ -89,8 +95,40 @@ const HomePage = (props) => {
 
       console.log(msgObject);
   }
+  //img upload
+  const readImages = async (e) => {
+    const file = e.target.files[0];
+    const storageRef = firebase.storage().ref('images');
+    const imageRef = firebase.database().ref('images').child('daily');
+    await storageRef.put(file);
+    storageRef.getDownloadURL().then((url) => {
+      imageRef.set(url);
+      const newState = [...imageUrl, { url }];
+      setImageUrl(newState);
+    });
+    
+    const imgObject = {
+      sender: auth.uid,
+      receiver: userUid,
+      isView: false,
+      type: "image",
+      message
+    }
 
-  //console.log(user);
+    if ( message !== ""){
+      dispatch(updateMessage(imgObject))
+      .then(()=>{
+        setMessage('');
+      })
+    }
+
+  };
+
+  const getImageUrl = () => {
+      const newState = [...imageUrl];
+      setImageUrl(newState);
+  };
+  //console.log("url", imageUrl);
 
   return (
     <Layout>
@@ -120,17 +158,34 @@ const HomePage = (props) => {
           <div className="messageSections">
             {
               chatStarted ?
+              
               user.chats.map(chats => 
                 <div style={{ textAlign: chats.sender == auth.uid ? 'right' : 'left' }}>
-                <p className="messageStyle">{chats.message}</p>
-              </div> 
+                  <p className="messageStyle">{chats.message}</p>
+              </div>
+              
               )
               : null
             }
+            {imageUrl
+                ? imageUrl.map(({ url }) => {
+                    return (
+                      <div >
+                        <img src={url} alt="" />
+                      </div>
+                    );
+                  })
+                : ''}
           </div>
           {
             chatStarted ?
             <div className="chatControls">
+              <div class="image-upload">
+              <label for="file-input">
+                <img src="https://bom.to/zzoDZuDh"/>
+              </label>
+              <input id="file-input" type="file" onChange={readImages}  />
+            </div> 
             <textarea 
               value={message}
               onChange={(e) => setMessage(e.target.value)}

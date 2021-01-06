@@ -22,6 +22,7 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 var database = firebase.database();
+var storage = firebase.storage();
 window.store = store;
 
 ReactDOM.render(

@@ -95,3 +95,13 @@
     background: green;
     box-shadow: 0 0 0 0;
 }
+.image-upload > input
+{
+    display: none;
+}
+
+.image-upload img
+{
+    width: 40px;
+    cursor: pointer;
+}

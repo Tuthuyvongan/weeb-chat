@@ -47,6 +47,7 @@ const LoginPage = (props) => {
       <div className="loginContainer">
         <Card>
           <form onSubmit={userLogin}>
+            <h3>Log in</h3>
             <input
               name="email"
               type="text"
@@ -54,7 +55,7 @@ const LoginPage = (props) => {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Email"
             />
-
+            <br></br>
             <input
               name="password"
               type="password"
@@ -62,7 +63,7 @@ const LoginPage = (props) => {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Password"
             />
-
+            <br></br>
             <div>
               <button>Login</button>
             </div>
